@@ -19,6 +19,20 @@
         return randomUsername;
       };
 
+      const validateExistingMessage = (messageId, item) => {
+        let newMessages = [];
+        let htmlMessages = "";
+        let messages = document.getElementById("messages");
+        for (const child of messages.children) {
+          let exist = newMessages.findIndex((item) => item.id == child.id);
+          if (exist == -1) newMessages.push(child);
+        }
+        newMessages.forEach((element) => {
+          htmlMessages += element.outerHTML;
+        });
+        messages.innerHTML = htmlMessages;
+      };
+
       const socket = io({
         auth: {
           username: await getUserName(),
@@ -31,11 +45,13 @@
       const messages = document.getElementById("messages");
 
       socket.on("chat message", (message, serverOffset, username) => {
-        const item = `<li>
+        const messageId = message + username;
+        const item = `<li id="${messageId}">
           <p>${message}</p>
           <small>${username}</small>
         </li>`;
         messages.insertAdjacentHTML("beforeend", item);
+        validateExistingMessage(messageId, item);
         socket.auth.serverOffset = serverOffset;
         messages.scrollTop = messages.scrollHeight;
       });
