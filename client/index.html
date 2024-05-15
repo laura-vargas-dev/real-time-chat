@@ -27,7 +27,10 @@
           let exist = newMessages.findIndex((item) => item.id == child.id);
           if (exist == -1) newMessages.push(child);
         }
+        const username = localStorage.getItem("username");
         newMessages.forEach((element) => {
+          if (element.id.includes(username)) element.className = "me";
+          else element.className = "you";
           htmlMessages += element.outerHTML;
         });
         messages.innerHTML = htmlMessages;
@@ -102,9 +105,9 @@
         padding: 0.5rem 1rem;
       }
 
-      #messages > li:nth-child(odd) {
+      /* #messages > li:nth-child(odd) {
         background: #000;
-      }
+      } */
 
       #chat {
         border: 1px solid #ccc;
@@ -128,6 +131,7 @@
       #input {
         border-radius: 9999px;
         border: 1px solid #eee;
+        background: #ddd;
         flex: 1;
         margin: 4px;
         padding: 0 8px;
@@ -147,6 +151,24 @@
 
       #form > button:hover {
         background: #0cf;
+      }
+
+      .me {
+        text-align: right;
+        background: #09f;
+      }
+
+      .you {
+        text-align: left;
+        background: #313131;
+      }
+
+      small {
+        font-size: 11px;
+      }
+
+      p {
+        margin: 5px 0;
       }
     </style>
   </head>
